@@ -2,13 +2,12 @@
 # 1. Stage or unpack the folder
 #
 
-$PackageName = "Fiserv.InboundReturnsExpress.TD-CAT_5.6.1.0_x64__xt0cqksxvfzh2.msix"
-$StagingFolderName = $PackageName.Substring(0, $PackageName.Length - 5)
+$PackageFullName = "Fiserv.InboundReturnsExpress.TD-CAT_5.6.1.0_x64__xt0cqksxvfzh2"
 
-$AppPath           = Join-Path -Path "C:\PSF\SourceApp" -ChildPath $PackageName      ## Path to the MSIX App Installer
-$StagingFolderPath = Join-Path -Path "C:\PSF\Staging" -ChildPath $StagingFolderName  ## Path to where the MSIX App will be staged
-$OSArchitecture    = "x$((Get-CimInstance Win32_Processor).AddressWidth)"            ## Operating System Architecture
-$Win10SDKVersion   = "10.0.26100.0"                                                  ## Latest version of the Win10 SDK
+$AppPath           = Join-Path -Path "C:\PSF\SourceApp" -ChildPath ($PackageFullName + ".msix")     ## Path to the MSIX App Installer
+$StagingFolderPath = Join-Path -Path "C:\PSF\Staging" -ChildPath $PackageFullName                   ## Path to where the MSIX App will be staged
+$OSArchitecture    = "x$((Get-CimInstance Win32_Processor).AddressWidth)"                           ## Operating System Architecture
+$Win10SDKVersion   = "10.0.26100.0"                                                                 ## Latest version of the Windows 11 SDK
 
 # Create the Staging folder if it does not exist
 if (-not (Test-Path $StagingFolderPath)) {
@@ -43,13 +42,12 @@ Add-AppxPackage -Path $manifestPath -Register
 # 4. Repackage and re-sign the application
 #
 
-$PackageName = "Fiserv.InboundReturnsExpress.TD-CAT_5.6.1.0_x64__xt0cqksxvfzh2.msix"
-$StagingFolderName = $PackageName.Substring(0, $PackageName.Length - 5)
+$PackageFullName = "Fiserv.InboundReturnsExpress.TD-CAT_5.6.1.0_x64__xt0cqksxvfzh2"
 
-$AppPath           = Join-Path -Path "C:\PSF\SourceApp" -ChildPath $PackageName                 ## Path to the MSIX App Installer
-$StagingFolderPath = Join-Path -Path "C:\PSF\Staging" -ChildPath $StagingFolderName             ## Path to where the MSIX App will be staged
-$OSArchitecture    = "x$((Get-CimInstance Win32_Processor).AddressWidth)"                       ## Operating System Architecture
-$Win10SDKVersion   = "10.0.26100.0"                                                             ## Latest version of the Win10 SDK
+$AppPath           = Join-Path -Path "C:\PSF\SourceApp" -ChildPath ($PackageFullName + ".msix")     ## Path to the MSIX App Installer
+$StagingFolderPath = Join-Path -Path "C:\PSF\Staging" -ChildPath $PackageFullName                   ## Path to where the MSIX App will be staged
+$OSArchitecture    = "x$((Get-CimInstance Win32_Processor).AddressWidth)"                           ## Operating System Architecture
+$Win10SDKVersion   = "10.0.26100.0"                                                                 ## Latest version of the Win10 SDK
 
 $CodeSigningCert   = "C:\PSF\Certificates\Self-Signed Code Signing Certificate.pfx"             ## Path to your code signing certificate
 $CodeSigningPass   = 'poltis'                                                                   ## Password used by the code signing certificate
