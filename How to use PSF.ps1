@@ -2,7 +2,16 @@
 # 1. Prepare the environment: Always run this block of code first to set up the environment.
 #
 
-$PackageFullName = "OneCommander_3.80.2.0_x64__xt0cqksxvfzh2"
+# DO NOT INCLUDE the .msix file extension
+# Package Full Name = "PackageName" + "_" + "Version" + "_" + "ProcessorArchitecture" + "_" + "SigningCertificateHash"
+$PackageFullName = "OneCommander_3.80.2.0_x64__xt0cqksxvfzh2.msix"
+
+# Remove the .msix file extension from the PackageFullName
+if ($PackageFullName -match ".msix$") {
+
+    $PackageFullName = $PackageFullName.Replace(".msix", "")
+
+}
 
 $AppPath           = Join-Path -Path "C:\PSF\SourceApp" -ChildPath ($PackageFullName + ".msix")     ## Path to the MSIX App Installer
 $StagingFolderPath = Join-Path -Path "C:\PSF\Staging" -ChildPath $PackageFullName                   ## Path to where the MSIX App will be staged
