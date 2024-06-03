@@ -1,13 +1,20 @@
 #
-# 1. Stage or unpack the folder
+# 1. Prepare the environment: Always run this block of code first to set up the environment.
 #
 
-$PackageFullName = "Fiserv.InboundReturnsExpress.TD-CAT_5.6.1.0_x64__xt0cqksxvfzh2"
+$PackageFullName = "OneCommander_3.80.2.0_x64__xt0cqksxvfzh2"
 
 $AppPath           = Join-Path -Path "C:\PSF\SourceApp" -ChildPath ($PackageFullName + ".msix")     ## Path to the MSIX App Installer
 $StagingFolderPath = Join-Path -Path "C:\PSF\Staging" -ChildPath $PackageFullName                   ## Path to where the MSIX App will be staged
 $OSArchitecture    = "x$((Get-CimInstance Win32_Processor).AddressWidth)"                           ## Operating System Architecture
 $Win10SDKVersion   = "10.0.26100.0"                                                                 ## Latest version of the Windows 11 SDK
+
+# Set the directory to the Windows 10 SDK
+Set-Location "${env:ProgramFiles(x86)}\Windows Kits\10\Bin\$Win10SDKVersion\$OSArchitecture"
+
+#
+# 2. Stage or unpack the package
+#
 
 # Create the Staging folder if it does not exist
 if (-not (Test-Path $StagingFolderPath)) {
@@ -16,14 +23,11 @@ if (-not (Test-Path $StagingFolderPath)) {
 
 }
 
-# Set the directory to the Windows 10 SDK
-Set-Location "${env:ProgramFiles(x86)}\Windows Kits\10\Bin\$Win10SDKVersion\$OSArchitecture"
-
 # Unpackage the Windows app to the staging folder
 .\makeappx.exe unpack /p "$AppPath" /d "$StagingFolderPath"
 
 #
-# 2. Edit the package and apply the fixes
+# 3. Edit the package and apply the fixes
 #
 
     # a. Add the PSF binaries
@@ -31,7 +35,7 @@ Set-Location "${env:ProgramFiles(x86)}\Windows Kits\10\Bin\$Win10SDKVersion\$OSA
     # c. Edit the AppxManifest.xml to launch PsfLauncher
 
 #
-# 3. Test the application by installing it directly from the staged folder - rather than creating, signing, and installing a package
+# 4. Test the application by installing it directly from the staged folder - rather than creating, signing, and installing a package
 #
 
 $manifestPath = Join-Path -Path $StagingFolderPath -ChildPath "AppxManifest.xml"
@@ -39,20 +43,11 @@ $manifestPath = Join-Path -Path $StagingFolderPath -ChildPath "AppxManifest.xml"
 Add-AppxPackage -Path $manifestPath -Register
 
 #
-# 4. Repackage and re-sign the application
+# 5. Repackage and re-sign the application
 #
-
-$PackageFullName = "Fiserv.InboundReturnsExpress.TD-CAT_5.6.1.0_x64__xt0cqksxvfzh2"
-
-$AppPath           = Join-Path -Path "C:\PSF\SourceApp" -ChildPath ($PackageFullName + ".msix")     ## Path to the MSIX App Installer
-$StagingFolderPath = Join-Path -Path "C:\PSF\Staging" -ChildPath $PackageFullName                   ## Path to where the MSIX App will be staged
-$OSArchitecture    = "x$((Get-CimInstance Win32_Processor).AddressWidth)"                           ## Operating System Architecture
-$Win10SDKVersion   = "10.0.26100.0"                                                                 ## Latest version of the Win10 SDK
 
 $CodeSigningCert   = "C:\PSF\Certificates\Self-Signed Code Signing Certificate.pfx"             ## Path to your code signing certificate
 $CodeSigningPass   = 'poltis'                                                                   ## Password used by the code signing certificate
-
-Set-Location "${env:ProgramFiles(x86)}\Windows Kits\10\Bin\$Win10SDKVersion\$OSArchitecture"
 
 .\makeappx.exe pack /p "$AppPath" /d "$StagingFolderPath" /o
 
