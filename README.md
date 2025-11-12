@@ -4,6 +4,6 @@ The Package Support Framework (PSF) is an open source kit that helps you apply f
 
 Here are some common examples where you can find the Package Support Framework useful:
 
-- Your app can't find some DLLs when launched. You may need to set your current working directory. You can learn about the required current working directory in the original shortcut before you converted to MSIX.
+- Your app can't find some DLLs when launched. You may need to set your current working directory.
 - The app writes into the install folder. You will typically see it by "Access Denied" errors in Process Monitor.
-- Your app needs to pass parameters to the executable on launch. You can learn more how PSF can help by going here and learn more about the available configurations here.
+- Your app needs to pass parameters to the executable on launch.
